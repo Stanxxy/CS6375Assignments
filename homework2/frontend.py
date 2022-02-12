@@ -73,7 +73,7 @@ if __name__ == '__main__':
             "n_iter": int(n_iter) if n_iter != "" else DEFAULT_N_ITER,
             "tolerance": float(tolerance) if tolerance != "" else DEFAULT_TOLERANCE,
             "learning_rate": float(learning_rate) if learning_rate != "" else DEFAULT_LEARNING_RATE,
-            "training_graph_path": learning_rate if training_graph_path != "" else DEFAULT_LOSS_GRAPH_PATH,
+            "loss_graph_path": learning_rate if training_graph_path != "" else DEFAULT_LOSS_GRAPH_PATH,
             "log_path": log_path if log_path != "" else DEFAULT_LOG_PATH
         }
         do_training(model1, data_dictionary, param_dict)
@@ -98,7 +98,7 @@ if __name__ == '__main__':
             "eta0": float(learning_rate) if learning_rate != "" else DEFAULT_LEARNING_RATE,
             "verbose": 1,
             "tol": float(tolerance) if tolerance != "" else DEFAULT_TOLERANCE,
-            # "training_graph_path": "UT_graph.png",
+            # "loss_graph_path": "UT_graph.png",
             "log_path": log_path if log_path != "" else DEFAULT_LOG_PATH
         }
         do_training(model2, data_dictionary, param_dict)
