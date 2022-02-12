@@ -1,0 +1,4 @@
+{"panlty": null, "n_iter": 1000, "tolerance": 1e-06, "learning_rate": 9e-05, "training_graph_path": "UT_graph.png", "log_path": "result.log", "mse": 8.456493438347028}
+{"panlty": null, "n_iter": 10000, "tolerance": 1e-06, "learning_rate": 9e-05, "training_graph_path": "UT_graph.png", "log_path": "result.log", "mse": 1.8960824746801581}
+{"panlty": null, "n_iter": 100000, "tolerance": 1e-06, "learning_rate": 9e-05, "training_graph_path": "UT_graph.png", "log_path": "result.log", "mse": 1.2304927934994603}
+{"max_iter": 1000, "learning_rate": "adaptive", "eta0": 9e-05, "verbose": 1, "tol": 1e-06, "training_graph_path": "UT_graph.png", "log_path": "result.log", "mse": 0.6907226844675463}
