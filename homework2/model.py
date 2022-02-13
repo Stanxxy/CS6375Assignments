@@ -22,7 +22,7 @@ class Homemade_linear_regression(Base_regression):
         self.intercept = intercept
         self.training_history = {}
 
-    def train(self, X: np.array, y: np.array, panlty=None, n_iter=10000, tolerance=1e-06, learning_rate=9e-05, test_X=None, test_y=None) -> None:
+    def train(self, X: np.array, y: np.array, penalty='l2', alpha=1e-04, n_iter=10000, tolerance=1e-06, learning_rate=9e-05, test_X=None, test_y=None) -> None:
       # X is 2d array, y is 1d array
         n = X.shape[0]
         if test_X is not None:
@@ -34,7 +34,7 @@ class Homemade_linear_regression(Base_regression):
             if test_X is not None:
                 test_X = np.concatenate([test_X, np.ones((n_test, 1))], axis=1)
         self.weight = self.gradient_descent(
-            X, y, self.weight, n_iter, tolerance, learning_rate, test_X, test_y)
+            X, y, self.weight, n_iter, tolerance, learning_rate, test_X, test_y, alpha, penalty)
 
     def predict(self, X: np.array) -> np.array:
         n = X.shape[0]
@@ -43,14 +43,15 @@ class Homemade_linear_regression(Base_regression):
         return np.dot(X, self.weight).reshape(-1)
 
     def gradient_descent(self, X: np.array, y: np.array, start, n_iter, tolerance,
-                         learning_rate, test_X, test_y) -> np.array:
+                         learning_rate, test_X, test_y, alpha: float, penalty: str) -> np.array:
         mse_training = []
         mse_testing = []
         vector = start
         last_loss = 0
         start_time = datetime.datetime.now()
         for i in range(n_iter):
-            diff = - learning_rate * self.gradient(X, y, vector)
+            diff = - learning_rate * \
+                self.gradient(X, y, vector, alpha, penalty)
             # if np.all(np.abs(diff) <= tolerance):
             # break
             # mean square err on training set and test set
@@ -89,36 +90,39 @@ class Homemade_linear_regression(Base_regression):
             self.mse_testing = None
         return vector
 
-    def gradient(self, X: np.array, y: np.array, weight: np.array) -> float:
+    def gradient(self, X: np.array, y: np.array, weight: np.array, alpha, penalty) -> float:
         n = X.shape[0]
         residual = (np.dot(X, weight) - y.reshape(-1, 1))
+
         res = np.dot(X.transpose(), residual) / n
+        if penalty == "l2":
+            res += alpha * np.sqrt(np.linalg.norm(weight)) / n
         return res
 
 # question2
 
 
 class Package_linear_regression(Base_regression):
-    def __init__(self, intercept=True, max_iter=10000, learning_rate="adaptive", eta0=9e-05, verbose=1, tol=1e-06) -> None:
-        # SGDRegressor(learning_rate=)
+    def __init__(self, intercept=True, max_iter=10000, learning_rate="constant", eta0=9e-05, verbose=1, tol=1e-06, alpha=1e-04, penalty="l2") -> None:
+        SGDRegressor()
         self.model = SGDRegressor(
-            max_iter=max_iter, learning_rate=learning_rate, eta0=eta0, verbose=verbose, tol=tol, fit_intercept=intercept)
+            max_iter=max_iter, learning_rate=learning_rate, eta0=eta0, verbose=verbose, tol=tol, fit_intercept=intercept, alpha=alpha, penalty=penalty)
         self.intercept = intercept
 
     def train(self, X: np.array, y: np.array) -> None:
       # X is 2d array, y is 1d array
-        n = X.shape[0]
+        # n = X.shape[0]
         d = X.shape[1] + 1
         self.weight = np.zeros(d)
         # if self.intercept:
         #     X = np.concatenate([X, np.ones((n, 1))], axis=1)
         self.model.fit(X, y)
-        self.weight = self.model.coef_
+        self.weight = np.array([self.model.coef_, self.model.intercept_])
 
     def predict(self, X) -> np.array:
-        if self.intercept:
-            n = X.shape[0]
-            # X = np.concatenate([X, np.ones((n, 1))], axis=1)
+        # if self.intercept:
+        #     n = X.shape[0]
+        # X = np.concatenate([X, np.ones((n, 1))], axis=1)
         return self.model.predict(X)
 
 
@@ -150,8 +154,7 @@ class TestModels(unittest.TestCase):
     def test_package_reg(self):
         self.model_packaged.train(self.training_x,
                                   self.training_y)
-        print([self.model_packaged.model.coef_,
-              self.model_packaged.model.intercept_])
+        print(self.model_packaged.weight.reshape(-1))
         # self.assertTrue(np.abs(self.model_packaged.model.coef_[
         #                        0] - 3) < self.tol)
         # self.assertTrue(np.abs(self.model_packaged.model.coef_[

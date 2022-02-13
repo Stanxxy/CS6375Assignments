@@ -144,24 +144,27 @@ def training_with_log(model_instance: Base_regression, data_dict: dict, param_di
 
     res = {}
     if isinstance(model_instance, Homemade_linear_regression):
-        panlty = param_dict.get("panlty", None)
+        alpha = param_dict.get("alpha", 1e-04)
         n_iter = param_dict.get("n_iter", 1000)
         tolerance = param_dict.get("tolerance", 1e-06)
         learning_rate = param_dict.get("learning_rate", 9e-05)
+        penalty = param_dict.get("penalty", "l2")
         model_instance.train(data_dict['training_x'],
                              data_dict['training_y'],
-                             panlty=panlty, n_iter=n_iter, tolerance=tolerance, learning_rate=learning_rate,
+                             alpha=alpha,
+                             penalty=penalty, n_iter=n_iter, tolerance=tolerance, learning_rate=learning_rate,
                              test_X=data_dict.get('testing_x', None), test_y=data_dict.get('testing_y', None))
         plot_and_save(model_instance.mse_training,
                       model_instance.mse_testing, param_dict['loss_graph_path'])
     else:
         max_iter = param_dict.get("max_iter", 1000)
-        learning_rate = param_dict.get("learning_rate", "adaptive")
-        eta0 = param_dict.get("eta0", 9e-05)
+        penalty = param_dict.get("penalty", "l2")
+        alpha = param_dict.get("alpha", 1e-04)
+        learning_rate = param_dict.get("learning_rate", 9e-05)
         verbose = param_dict.get("verbose", 1)
         tol = param_dict.get("tol", 1e-06)
         model_instance = Package_linear_regression(
-            max_iter=max_iter, learning_rate=learning_rate, eta0=eta0, verbose=verbose, tol=tol)
+            max_iter=max_iter, eta0=learning_rate, verbose=verbose, tol=tol, penalty=penalty, alpha=alpha)
         model_instance.train(data_dict['training_x'],
                              data_dict['training_y'])
 
