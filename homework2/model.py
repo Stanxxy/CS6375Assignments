@@ -59,8 +59,7 @@ class Homemade_linear_regression(Base_regression):
                 self.predict(X[:, :-1]), y)
             # print(np.abs(mse_training - last_loss))
             mse_training.append(mse_training_i)
-            if np.abs(mse_training_i - last_loss) <= tolerance:
-                break
+
             vector += diff
             self.weight = vector
 
@@ -68,6 +67,9 @@ class Homemade_linear_regression(Base_regression):
                 mse_testing_i = mean_squared_error(
                     self.predict(test_X[:, :-1]), test_y)
                 mse_testing.append(mse_testing_i)
+
+            if np.abs(mse_training_i - last_loss) <= tolerance:
+                break
 
             if i % 100 == 0:
                 end_time = datetime.datetime.now()
