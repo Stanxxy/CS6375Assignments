@@ -3,4 +3,5 @@
 ./homework2/requirements.txt
 ./homework2/*.docx
 ./homework2/*.pdf
+./homework3/*.csv
 .DS_Store
