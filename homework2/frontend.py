@@ -74,18 +74,17 @@ if __name__ == '__main__':
             "Where do you want to save the logs? ({} by default) ".format(DEFAULT_LOG_PATH))
         param_dict = {
             # Items will be decided later
-            "panlty": None,
             "n_iter": int(n_iter) if n_iter != "" else DEFAULT_N_ITER,
             "tolerance": float(tolerance) if tolerance != "" else DEFAULT_TOLERANCE,
             "penalty": penalty if penalty != "" else DEFAULT_PANELTY,
             "alpha": float(alpha) if alpha != "" else DEFAULT_ALPHA,
             "learning_rate": float(learning_rate) if learning_rate != "" else DEFAULT_LEARNING_RATE,
-            "loss_graph_path": learning_rate if training_graph_path != "" else DEFAULT_LOSS_GRAPH_PATH,
+            "loss_graph_path": training_graph_path if training_graph_path != "" else DEFAULT_LOSS_GRAPH_PATH,
             "log_path": log_path if log_path != "" else DEFAULT_LOG_PATH
         }
         do_training(model1, data_dictionary, param_dict)
 
-    elif model_num == "packged":
+    elif model_num == "packaged":
         # do training through packaged model
         model2 = model.Package_linear_regression()
         n_iter = input(
