@@ -1,4 +1,6 @@
 ./homework2/*.csv
 ./homework2/python_env
 ./homework2/requirements.txt
+./homework2/*.docx
+./homework2/*.pdf
 .DS_Store
